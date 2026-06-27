@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채널 세팅 기록 — Avantis</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a18; min-height: 100vh; }
+  .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #888; margin-bottom: 2rem; }
+  .card { background: #fff; border: 0.5px solid #e0e0da; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .sec-title { font-size: 13px; font-weight: 500; color: #666; margin-bottom: 12px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
+  input, select, textarea {
+    width: 100%; font-size: 14px; padding: 8px 10px;
+    border: 0.5px solid #ddd; border-radius: 8px;
+    background: #fafaf8; color: #1a1a18; outline: none;
+    font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #4a90d9; }
+  textarea { resize: vertical; min-height: 64px; }
+  .btn-row { display: flex; gap: 8px; margin-top: 1rem; }
+  button {
+    padding: 9px 20px; border-radius: 8px; font-size: 14px;
+    cursor: pointer; border: 0.5px solid #ccc;
+    background: transparent; color: #1a1a18; font-family: inherit;
+  }
+  button:hover { background: #f0f0ee; }
+  button.primary { background: #1a1a18; color: #fff; border-color: transparent; }
+  button.primary:hover { background: #333; }
+  button.danger { color: #c0392b; border-color: #f5c6c2; font-size: 12px; padding: 4px 10px; }
+  button.danger:hover { background: #fff5f5; }
+  .records { margin-top: 2rem; }
+  .records-title { font-size: 13px; font-weight: 500; color: #888; margin-bottom: 10px; }
+  .record { background: #fff; border: 0.5px solid #e0e0da; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; }
+  .record-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .record-artist { font-size: 15px; font-weight: 500; }
+  .record-ch { font-size: 12px; color: #888; margin-top: 2px; }
+  .record-date { font-size: 12px; color: #aaa; }
+  .record-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px; }
+  .ritem-label { font-size: 11px; color: #aaa; }
+  .ritem-val { font-size: 13px; font-weight: 500; color: #1a1a18; }
+  .record-memo { font-size: 12px; color: #666; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #eee; }
+  .empty { text-align: center; padding: 3rem; color: #bbb; font-size: 14px; }
+  .record-actions { display: flex; align-items: center; gap: 8px; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #eef4ff; color: #3a6fc4; margin-left: 6px; }
+  @media (max-width: 500px) {
+    .row, .row3 { grid-template-columns: 1fr; }
+    .record-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎚️ 채널 세팅 기록</h1>
+  <p class="sub">Allen &amp; Heath Avantis · 공연별 채널 세팅값 저장</p>
+
+  <div class="card">
+    <div class="sec-title">📋 공연 정보</div>
+    <div class="row">
+      <div>
+        <label>공연명 / 아티스트 *</label>
+        <input type="text" id="artist" placeholder="예: 홍길동 밴드 정기공연">
+      </div>
+      <div>
+        <label>날짜 *</label>
+        <input type="date" id="date">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">🎛️ 채널 정보</div>
+    <div class="row">
+      <div>
+        <label>채널 번호 *</label>
+        <input type="text" id="ch" placeholder="예: CH 1">
+      </div>
+      <div>
+        <label>악기 / 소스</label>
+        <input type="text" id="source" placeholder="예: 보컬, 킥드럼, 어쿠스틱">
+      </div>
+    </div>
+    <div class="row3">
+      <div>
+        <label>게인 (dB)</label>
+        <input type="text" id="gain" placeholder="예: +40">
+      </div>
+      <div>
+        <label>팬텀 파워 (48V)</label>
+        <select id="phantom">
+          <option value="">미입력</option>
+          <option>ON</option>
+          <option>OFF</option>
+        </select>
+      </div>
+      <div>
+        <label>페이더</label>
+        <input type="text" id="fader" placeholder="예: 0dB, -3dB">
+      </div>
+    </div>
+    <div class="row3">
+      <div>
+        <label>HPF</label>
+        <input type="text" id="hpf" placeholder="예: 80Hz">
+      </div>
+      <div>
+        <label>문제 주파수</label>
+        <input type="text" id="freq" placeholder="예: 2kHz 컷">
+      </div>
+      <div>
+        <label>리버브 / FX</label>
+        <input type="text" id="fx" placeholder="예: 홀 리버브 중간">
+      </div>
+    </div>
+    <div>
+      <label>메모 (특이사항, 다음 공연 참고사항)</label>
+      <textarea id="memo" placeholder="예: 하울링 주의, 다음엔 게인 줄일 것, 마이크 위치 변경 필요..."></textarea>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="primary" onclick="saveRecord()">💾 저장</button>
+    <button onclick="clearForm()">초기화</button>
+    <button onclick="exportCSV()" style="margin-left:auto">📥 엑셀로 내보내기</button>
+  </div>
+
+  <div class="records" id="recordsArea"></div>
+</div>
+
+<script>
+  let records = JSON.parse(localStorage.getItem('avantis_channel_logs') || '[]');
+
+  function todayStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  document.getElementById('date').value = todayStr();
+
+  function saveRecord() {
+    const artist = document.getElementById('artist').value.trim();
+    const ch = document.getElementById('ch').value.trim();
+    if (!artist) { alert('공연명을 입력해주세요!'); return; }
+    if (!ch) { alert('채널 번호를 입력해주세요!'); return; }
+
+    const rec = {
+      id: Date.now(),
+      artist,
+      date: document.getElementById('date').value,
+      ch,
+      source: document.getElementById('source').value.trim(),
+      gain: document.getElementById('gain').value.trim(),
+      phantom: document.getElementById('phantom').value,
+      fader: document.getElementById('fader').value.trim(),
+      hpf: document.getElementById('hpf').value.trim(),
+      freq: document.getElementById('freq').value.trim(),
+      fx: document.getElementById('fx').value.trim(),
+      memo: document.getElementById('memo').value.trim(),
+    };
+
+    records.unshift(rec);
+    localStorage.setItem('avantis_channel_logs', JSON.stringify(records));
+    renderRecords();
+    clearForm();
+  }
+
+  function clearForm() {
+    ['artist','ch','source','gain','fader','hpf','freq','fx','memo'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('phantom').value = '';
+    document.getElementById('date').value = todayStr();
+  }
+
+  function deleteRecord(id) {
+    if (!confirm('이 기록을 삭제할까요?')) return;
+    records = records.filter(r => r.id !== id);
+    localStorage.setItem('avantis_channel_logs', JSON.stringify(records));
+    renderRecords();
+  }
+
+  function exportCSV() {
+    if (records.length === 0) { alert('저장된 기록이 없어요!'); return; }
+    const headers = ['날짜','공연명','채널','악기/소스','게인','팬텀','페이더','HPF','문제주파수','FX','메모'];
+    const rows = records.map(r => [
+      r.date, r.artist, r.ch, r.source, r.gain, r.phantom,
+      r.fader, r.hpf, r.freq, r.fx, r.memo
+    ].map(v => '"' + (v||'').replace(/"/g,'""') + '"').join(','));
+    const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '채널세팅기록_' + todayStr() + '.csv';
+    a.click();
+  }
+
+  function renderRecords() {
+    const area = document.getElementById('recordsArea');
+    if (records.length === 0) {
+      area.innerHTML = '<div class="empty">아직 저장된 기록이 없어요.<br>첫 번째 채널 세팅을 기록해보세요!</div>';
+      return;
+    }
+
+    const grouped = {};
+    records.forEach(r => {
+      const key = r.date + '||' + r.artist;
+      if (!grouped[key]) grouped[key] = { date: r.date, artist: r.artist, items: [] };
+      grouped[key].items.push(r);
+    });
+
+    let html = '<div class="records-title">저장된 기록 ' + records.length + '개</div>';
+    Object.values(grouped).forEach(g => {
+      html += `<div style="margin-bottom:6px;font-size:13px;font-weight:500;color:#555;padding-left:4px">${g.date} · ${g.artist}</div>`;
+      g.items.forEach(r => {
+        html += `
+        <div class="record">
+          <div class="record-top">
+            <div>
+              <div class="record-artist">${r.ch}${r.source ? ' <span style="font-weight:400;color:#888">· ' + r.source + '</span>' : ''}</div>
+            </div>
+            <div class="record-actions">
+              <button class="danger" onclick="deleteRecord(${r.id})">삭제</button>
+            </div>
+          </div>
+          <div class="record-grid">
+            ${r.gain ? `<div><div class="ritem-label">게인</div><div class="ritem-val">${r.gain}</div></div>` : ''}
+            ${r.phantom ? `<div><div class="ritem-label">팬텀</div><div class="ritem-val">${r.phantom}</div></div>` : ''}
+            ${r.fader ? `<div><div class="ritem-label">페이더</div><div class="ritem-val">${r.fader}</div></div>` : ''}
+            ${r.hpf ? `<div><div class="ritem-label">HPF</div><div class="ritem-val">${r.hpf}</div></div>` : ''}
+            ${r.freq ? `<div><div class="ritem-label">문제주파수</div><div class="ritem-val">${r.freq}</div></div>` : ''}
+            ${r.fx ? `<div><div class="ritem-label">FX</div><div class="ritem-val">${r.fx}</div></div>` : ''}
+          </div>
+          ${r.memo ? `<div class="record-memo">📝 ${r.memo}</div>` : ''}
+        </div>`;
+      });
+    });
+
+    area.innerHTML = html;
+  }
+
+  renderRecords();
+</script>
+</body>
+</html>
