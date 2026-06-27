@@ -7,13 +7,12 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a18; min-height: 100vh; }
-  .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
   h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
   .sub { font-size: 13px; color: #888; margin-bottom: 2rem; }
   .card { background: #fff; border: 0.5px solid #e0e0da; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
   .sec-title { font-size: 13px; font-weight: 500; color: #666; margin-bottom: 12px; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
   input, select, textarea {
     width: 100%; font-size: 14px; padding: 8px 10px;
@@ -22,35 +21,53 @@
     font-family: inherit;
   }
   input:focus, select:focus, textarea:focus { border-color: #4a90d9; }
-  textarea { resize: vertical; min-height: 64px; }
+  textarea { resize: vertical; min-height: 56px; }
+
+  /* 채널 카드 */
+  .ch-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .ch-card { background: #fafaf8; border: 0.5px solid #e0e0da; border-radius: 10px; padding: 14px; position: relative; }
+  .ch-card-title { font-size: 12px; font-weight: 500; color: #4a90d9; margin-bottom: 10px; }
+  .ch-row { display: grid; grid-template-columns: 80px 1fr 80px 80px 80px 90px 90px; gap: 8px; margin-bottom: 8px; align-items: end; }
+  .ch-row2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .del-ch { position: absolute; top: 10px; right: 12px; font-size: 12px; padding: 3px 10px; border-radius: 6px; cursor: pointer; border: 0.5px solid #f5c6c2; background: transparent; color: #c0392b; font-family: inherit; }
+  .del-ch:hover { background: #fff5f5; }
+
+  .add-ch-btn { width: 100%; padding: 10px; border-radius: 8px; border: 0.5px dashed #bbb; background: transparent; color: #666; font-size: 14px; cursor: pointer; font-family: inherit; margin-bottom: 4px; }
+  .add-ch-btn:hover { background: #f5f5f3; border-color: #4a90d9; color: #4a90d9; }
+
   .btn-row { display: flex; gap: 8px; margin-top: 1rem; }
-  button {
-    padding: 9px 20px; border-radius: 8px; font-size: 14px;
-    cursor: pointer; border: 0.5px solid #ccc;
-    background: transparent; color: #1a1a18; font-family: inherit;
-  }
-  button:hover { background: #f0f0ee; }
-  button.primary { background: #1a1a18; color: #fff; border-color: transparent; }
+  button.primary { padding: 9px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; border: none; background: #1a1a18; color: #fff; font-family: inherit; }
   button.primary:hover { background: #333; }
-  button.danger { color: #c0392b; border-color: #f5c6c2; font-size: 12px; padding: 4px 10px; }
-  button.danger:hover { background: #fff5f5; }
+  button.secondary { padding: 9px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; border: 0.5px solid #ccc; background: transparent; color: #1a1a18; font-family: inherit; }
+  button.secondary:hover { background: #f0f0ee; }
+  button.export { padding: 9px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; border: 0.5px solid #ccc; background: transparent; color: #1a1a18; font-family: inherit; margin-left: auto; }
+  button.export:hover { background: #f0f0ee; }
+
+  /* 기록 목록 */
   .records { margin-top: 2rem; }
   .records-title { font-size: 13px; font-weight: 500; color: #888; margin-bottom: 10px; }
-  .record { background: #fff; border: 0.5px solid #e0e0da; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; }
-  .record-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .record { background: #fff; border: 0.5px solid #e0e0da; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .record-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .record-artist { font-size: 15px; font-weight: 500; }
-  .record-ch { font-size: 12px; color: #888; margin-top: 2px; }
   .record-date { font-size: 12px; color: #aaa; }
-  .record-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px; }
-  .ritem-label { font-size: 11px; color: #aaa; }
-  .ritem-val { font-size: 13px; font-weight: 500; color: #1a1a18; }
-  .record-memo { font-size: 12px; color: #666; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #eee; }
+  .record-del { font-size: 12px; padding: 3px 10px; border-radius: 6px; cursor: pointer; border: 0.5px solid #f5c6c2; background: transparent; color: #c0392b; font-family: inherit; }
+  .record-del:hover { background: #fff5f5; }
+
+  /* 채널 테이블 */
+  .ch-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ch-table th { text-align: left; padding: 6px 8px; color: #aaa; font-weight: 400; border-bottom: 0.5px solid #eee; font-size: 11px; }
+  .ch-table td { padding: 7px 8px; border-bottom: 0.5px solid #f5f5f3; color: #1a1a18; }
+  .ch-table tr:last-child td { border-bottom: none; }
+  .ch-table tr:hover td { background: #fafaf8; }
+  .memo-row { font-size: 12px; color: #666; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #eee; }
+
   .empty { text-align: center; padding: 3rem; color: #bbb; font-size: 14px; }
-  .record-actions { display: flex; align-items: center; gap: 8px; }
-  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #eef4ff; color: #3a6fc4; margin-left: 6px; }
-  @media (max-width: 500px) {
-    .row, .row3 { grid-template-columns: 1fr; }
-    .record-grid { grid-template-columns: repeat(2, 1fr); }
+  .ch-count { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #eef4ff; color: #3a6fc4; margin-left: 6px; }
+
+  @media (max-width: 600px) {
+    .ch-row { grid-template-columns: 1fr 1fr; }
+    .ch-row2 { grid-template-columns: 1fr 1fr; }
+    .ch-table { font-size: 12px; }
   }
 </style>
 </head>
@@ -75,174 +92,186 @@
 
   <div class="card">
     <div class="sec-title">🎛️ 채널 정보</div>
-    <div class="row">
-      <div>
-        <label>채널 번호 *</label>
-        <input type="text" id="ch" placeholder="예: CH 1">
-      </div>
-      <div>
-        <label>악기 / 소스</label>
-        <input type="text" id="source" placeholder="예: 보컬, 킥드럼, 어쿠스틱">
-      </div>
-    </div>
-    <div class="row3">
-      <div>
-        <label>게인 (dB)</label>
-        <input type="text" id="gain" placeholder="예: +40">
-      </div>
-      <div>
-        <label>팬텀 파워 (48V)</label>
-        <select id="phantom">
-          <option value="">미입력</option>
-          <option>ON</option>
-          <option>OFF</option>
-        </select>
-      </div>
-      <div>
-        <label>페이더</label>
-        <input type="text" id="fader" placeholder="예: 0dB, -3dB">
-      </div>
-    </div>
-    <div class="row3">
-      <div>
-        <label>HPF</label>
-        <input type="text" id="hpf" placeholder="예: 80Hz">
-      </div>
-      <div>
-        <label>문제 주파수</label>
-        <input type="text" id="freq" placeholder="예: 2kHz 컷">
-      </div>
-      <div>
-        <label>리버브 / FX</label>
-        <input type="text" id="fx" placeholder="예: 홀 리버브 중간">
-      </div>
-    </div>
-    <div>
-      <label>메모 (특이사항, 다음 공연 참고사항)</label>
-      <textarea id="memo" placeholder="예: 하울링 주의, 다음엔 게인 줄일 것, 마이크 위치 변경 필요..."></textarea>
-    </div>
+    <div class="ch-list" id="chList"></div>
+    <button class="add-ch-btn" onclick="addChannel()">+ 채널 추가</button>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">📝 공연 전체 메모</div>
+    <textarea id="memo" placeholder="예: 전반적으로 저역 과다, 드럼 모니터 피드백 주의, 다음 공연 시 스테이지 레이아웃 변경 필요..."></textarea>
   </div>
 
   <div class="btn-row">
     <button class="primary" onclick="saveRecord()">💾 저장</button>
-    <button onclick="clearForm()">초기화</button>
-    <button onclick="exportCSV()" style="margin-left:auto">📥 엑셀로 내보내기</button>
+    <button class="secondary" onclick="clearForm()">초기화</button>
+    <button class="export" onclick="exportCSV()">📥 엑셀로 내보내기</button>
   </div>
 
   <div class="records" id="recordsArea"></div>
 </div>
 
 <script>
-  let records = JSON.parse(localStorage.getItem('avantis_channel_logs') || '[]');
+let records = JSON.parse(localStorage.getItem('avantis_logs_v2') || '[]');
+let chCount = 0;
 
-  function todayStr() {
-    return new Date().toISOString().slice(0, 10);
-  }
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
 
-  document.getElementById('date').value = todayStr();
+document.getElementById('date').value = todayStr();
 
-  function saveRecord() {
-    const artist = document.getElementById('artist').value.trim();
-    const ch = document.getElementById('ch').value.trim();
-    if (!artist) { alert('공연명을 입력해주세요!'); return; }
-    if (!ch) { alert('채널 번호를 입력해주세요!'); return; }
+function addChannel() {
+  chCount++;
+  const id = 'ch_' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'ch-card';
+  div.id = id;
+  div.innerHTML = `
+    <div class="ch-card-title">CH ${chCount}</div>
+    <button class="del-ch" onclick="removeChannel('${id}')">삭제</button>
+    <div class="ch-row">
+      <div><label>채널 번호</label><input type="text" class="f-ch" placeholder="CH 1"></div>
+      <div><label>악기 / 소스</label><input type="text" class="f-source" placeholder="예: 보컬, 킥, 스네어"></div>
+      <div><label>게인</label><input type="text" class="f-gain" placeholder="+40"></div>
+      <div><label>팬텀</label><select class="f-phantom"><option value="">-</option><option>ON</option><option>OFF</option></select></div>
+      <div><label>페이더</label><input type="text" class="f-fader" placeholder="0dB"></div>
+      <div><label>HPF</label><input type="text" class="f-hpf" placeholder="80Hz"></div>
+      <div><label>문제 주파수</label><input type="text" class="f-freq" placeholder="2kHz 컷"></div>
+    </div>
+    <div class="ch-row2">
+      <div><label>리버브 / FX</label><input type="text" class="f-fx" placeholder="홀 리버브 중간"></div>
+      <div><label>마이크 종류</label><input type="text" class="f-mic" placeholder="예: SM58, Beta91"></div>
+      <div><label>채널 메모</label><input type="text" class="f-chmemo" placeholder="특이사항"></div>
+    </div>
+  `;
+  document.getElementById('chList').appendChild(div);
+}
 
-    const rec = {
-      id: Date.now(),
-      artist,
-      date: document.getElementById('date').value,
-      ch,
-      source: document.getElementById('source').value.trim(),
-      gain: document.getElementById('gain').value.trim(),
-      phantom: document.getElementById('phantom').value,
-      fader: document.getElementById('fader').value.trim(),
-      hpf: document.getElementById('hpf').value.trim(),
-      freq: document.getElementById('freq').value.trim(),
-      fx: document.getElementById('fx').value.trim(),
-      memo: document.getElementById('memo').value.trim(),
-    };
+function removeChannel(id) {
+  document.getElementById(id).remove();
+}
 
-    records.unshift(rec);
-    localStorage.setItem('avantis_channel_logs', JSON.stringify(records));
-    renderRecords();
-    clearForm();
-  }
+function saveRecord() {
+  const artist = document.getElementById('artist').value.trim();
+  if (!artist) { alert('공연명을 입력해주세요!'); return; }
 
-  function clearForm() {
-    ['artist','ch','source','gain','fader','hpf','freq','fx','memo'].forEach(id => {
-      document.getElementById(id).value = '';
+  const chCards = document.querySelectorAll('.ch-card');
+  if (chCards.length === 0) { alert('채널을 최소 1개 추가해주세요!'); return; }
+
+  const channels = [];
+  chCards.forEach(card => {
+    channels.push({
+      ch: card.querySelector('.f-ch').value.trim(),
+      source: card.querySelector('.f-source').value.trim(),
+      gain: card.querySelector('.f-gain').value.trim(),
+      phantom: card.querySelector('.f-phantom').value,
+      fader: card.querySelector('.f-fader').value.trim(),
+      hpf: card.querySelector('.f-hpf').value.trim(),
+      freq: card.querySelector('.f-freq').value.trim(),
+      fx: card.querySelector('.f-fx').value.trim(),
+      mic: card.querySelector('.f-mic').value.trim(),
+      chmemo: card.querySelector('.f-chmemo').value.trim(),
     });
-    document.getElementById('phantom').value = '';
-    document.getElementById('date').value = todayStr();
-  }
+  });
 
-  function deleteRecord(id) {
-    if (!confirm('이 기록을 삭제할까요?')) return;
-    records = records.filter(r => r.id !== id);
-    localStorage.setItem('avantis_channel_logs', JSON.stringify(records));
-    renderRecords();
-  }
+  const rec = {
+    id: Date.now(),
+    artist,
+    date: document.getElementById('date').value,
+    memo: document.getElementById('memo').value.trim(),
+    channels,
+  };
 
-  function exportCSV() {
-    if (records.length === 0) { alert('저장된 기록이 없어요!'); return; }
-    const headers = ['날짜','공연명','채널','악기/소스','게인','팬텀','페이더','HPF','문제주파수','FX','메모'];
-    const rows = records.map(r => [
-      r.date, r.artist, r.ch, r.source, r.gain, r.phantom,
-      r.fader, r.hpf, r.freq, r.fx, r.memo
-    ].map(v => '"' + (v||'').replace(/"/g,'""') + '"').join(','));
-    const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = '채널세팅기록_' + todayStr() + '.csv';
-    a.click();
-  }
-
-  function renderRecords() {
-    const area = document.getElementById('recordsArea');
-    if (records.length === 0) {
-      area.innerHTML = '<div class="empty">아직 저장된 기록이 없어요.<br>첫 번째 채널 세팅을 기록해보세요!</div>';
-      return;
-    }
-
-    const grouped = {};
-    records.forEach(r => {
-      const key = r.date + '||' + r.artist;
-      if (!grouped[key]) grouped[key] = { date: r.date, artist: r.artist, items: [] };
-      grouped[key].items.push(r);
-    });
-
-    let html = '<div class="records-title">저장된 기록 ' + records.length + '개</div>';
-    Object.values(grouped).forEach(g => {
-      html += `<div style="margin-bottom:6px;font-size:13px;font-weight:500;color:#555;padding-left:4px">${g.date} · ${g.artist}</div>`;
-      g.items.forEach(r => {
-        html += `
-        <div class="record">
-          <div class="record-top">
-            <div>
-              <div class="record-artist">${r.ch}${r.source ? ' <span style="font-weight:400;color:#888">· ' + r.source + '</span>' : ''}</div>
-            </div>
-            <div class="record-actions">
-              <button class="danger" onclick="deleteRecord(${r.id})">삭제</button>
-            </div>
-          </div>
-          <div class="record-grid">
-            ${r.gain ? `<div><div class="ritem-label">게인</div><div class="ritem-val">${r.gain}</div></div>` : ''}
-            ${r.phantom ? `<div><div class="ritem-label">팬텀</div><div class="ritem-val">${r.phantom}</div></div>` : ''}
-            ${r.fader ? `<div><div class="ritem-label">페이더</div><div class="ritem-val">${r.fader}</div></div>` : ''}
-            ${r.hpf ? `<div><div class="ritem-label">HPF</div><div class="ritem-val">${r.hpf}</div></div>` : ''}
-            ${r.freq ? `<div><div class="ritem-label">문제주파수</div><div class="ritem-val">${r.freq}</div></div>` : ''}
-            ${r.fx ? `<div><div class="ritem-label">FX</div><div class="ritem-val">${r.fx}</div></div>` : ''}
-          </div>
-          ${r.memo ? `<div class="record-memo">📝 ${r.memo}</div>` : ''}
-        </div>`;
-      });
-    });
-
-    area.innerHTML = html;
-  }
-
+  records.unshift(rec);
+  localStorage.setItem('avantis_logs_v2', JSON.stringify(records));
   renderRecords();
+  clearForm();
+}
+
+function clearForm() {
+  document.getElementById('artist').value = '';
+  document.getElementById('date').value = todayStr();
+  document.getElementById('memo').value = '';
+  document.getElementById('chList').innerHTML = '';
+  chCount = 0;
+}
+
+function deleteRecord(id) {
+  if (!confirm('이 공연 기록을 삭제할까요?')) return;
+  records = records.filter(r => r.id !== id);
+  localStorage.setItem('avantis_logs_v2', JSON.stringify(records));
+  renderRecords();
+}
+
+function exportCSV() {
+  if (records.length === 0) { alert('저장된 기록이 없어요!'); return; }
+  const headers = ['날짜','공연명','채널','악기/소스','게인','팬텀','페이더','HPF','문제주파수','FX','마이크','채널메모','공연메모'];
+  const rows = [];
+  records.forEach(r => {
+    r.channels.forEach(c => {
+      rows.push([r.date, r.artist, c.ch, c.source, c.gain, c.phantom, c.fader, c.hpf, c.freq, c.fx, c.mic, c.chmemo, r.memo]
+        .map(v => '"' + (v||'').replace(/"/g,'""') + '"').join(','));
+    });
+  });
+  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '채널세팅기록_' + todayStr() + '.csv';
+  a.click();
+}
+
+function renderRecords() {
+  const area = document.getElementById('recordsArea');
+  if (records.length === 0) {
+    area.innerHTML = '<div class="empty">아직 저장된 기록이 없어요.<br>첫 번째 공연 세팅을 기록해보세요!</div>';
+    return;
+  }
+
+  let html = '<div class="records-title">저장된 기록 ' + records.length + '건</div>';
+  records.forEach(r => {
+    html += `
+    <div class="record">
+      <div class="record-top">
+        <div>
+          <span class="record-artist">${r.artist}</span>
+          <span class="ch-count">${r.channels.length}ch</span>
+          <span style="font-size:12px;color:#aaa;margin-left:8px">${r.date}</span>
+        </div>
+        <button class="record-del" onclick="deleteRecord(${r.id})">삭제</button>
+      </div>
+      <table class="ch-table">
+        <thead>
+          <tr>
+            <th>채널</th><th>악기/소스</th><th>게인</th><th>팬텀</th><th>페이더</th><th>HPF</th><th>문제주파수</th><th>FX</th><th>마이크</th><th>메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${r.channels.map(c => `
+            <tr>
+              <td>${c.ch||'-'}</td>
+              <td>${c.source||'-'}</td>
+              <td>${c.gain||'-'}</td>
+              <td>${c.phantom||'-'}</td>
+              <td>${c.fader||'-'}</td>
+              <td>${c.hpf||'-'}</td>
+              <td>${c.freq||'-'}</td>
+              <td>${c.fx||'-'}</td>
+              <td>${c.mic||'-'}</td>
+              <td>${c.chmemo||'-'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      ${r.memo ? `<div class="memo-row">📝 ${r.memo}</div>` : ''}
+    </div>`;
+  });
+
+  area.innerHTML = html;
+}
+
+renderRecords();
+addChannel();
 </script>
 </body>
 </html>
